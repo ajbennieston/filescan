@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     size_t fsize;
     size_t context = 64;
 
-    if ( argc < 3 || argc > 4 )
+    if (argc < 3 || argc > 4)
     {
         printf("Usage: %s string filename [context-length]\n", argv[0]);
         return 1;
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         context = atoi(argv[3]);
 
     file_descriptor = open_file(filename);
-    if ( file_descriptor == -1 )
+    if (file_descriptor == -1)
     {
         perror(filename);
         return 1;
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     fsize = file_size(file_descriptor);
 
     data = mmap_file(file_descriptor, fsize);
-    if ( data == NULL )
+    if (data == NULL)
     {
         perror(filename);
         return 1;
@@ -66,44 +66,51 @@ void hexdump_region(const char *data, size_t length, size_t offset)
     char buffer[17];
     char *bufpos = &buffer[0];
     int printed_chars = 0;
-    printf("%016zx: ", offset);
-    while ( data != end )
+
+    while (data != end)
     {
+        /* Display offset at the beginning of each line */
+        if (count % 16 == 0)
+            printf("%016zx: ", offset);
+
+        /* Print hex value of byte, and store a printable
+         * representation for the end of the line.
+         */
         printed_chars += printf("%2.2hhx", *data);
-        if ( is_printable(*data) )
+        if (is_printable(*data))
             *bufpos = *data;
         else
             *bufpos = '.';
+
         ++bufpos;
         ++data;
         ++count;
         ++offset;
-        if ( data != end )
-        {
-            printed_chars += printf("%2.2hhx ", *data);
-            if ( is_printable(*data) )
-                *bufpos = *data;
-            else
-                *bufpos = '.';
-            ++bufpos;
-            ++data;
-            ++count;
-            ++offset;
-        }
-        if ( count % 16 == 0)
+
+        /* Write a space every two bytes */
+        if (count % 2 == 0)
+            printed_chars += printf(" ");
+
+        /* Write the printable representation
+         * at the end of each line.
+         */
+        if (count % 16 == 0)
         {
             *bufpos = '\0';
             printf("  %s\n", buffer);
-            if ( data != end )
-                printf("%016zx: ", offset);
             bufpos = &buffer[0];
             printed_chars = 0;
         }
     }
-    if ( bufpos != &buffer[0] )
+
+    if (bufpos != &buffer[0])
     {
+        /* Output the final line's printable
+         * representation, taking care to align
+         * correctly.
+         */
         *bufpos = '\0';
-        while ( printed_chars++ != 40 )
+        while (printed_chars++ != 40)
             printf(" ");
         printf("  %s\n", buffer);
     }
@@ -119,7 +126,7 @@ int open_file(const char *filename)
 size_t file_size(int file_descriptor)
 {
     struct stat s;
-    if ( fstat(file_descriptor, &s) == -1 )
+    if (fstat(file_descriptor, &s) == -1)
         return 0;
     else
         return s.st_size;
@@ -157,16 +164,16 @@ void scan_for_string(const char *begin, size_t size, const char *string, size_t 
         {
             printf("---- Offset: %zu (%#016zx) ----\n", 
                     bytes_scanned, bytes_scanned);
-            if ( bytes_scanned + context < end )
+            if (bytes_scanned + context < end)
             {
-                if ( bytes_scanned >= context )
+                if (bytes_scanned >= context)
                     hexdump_region(data - context, 2 * context, bytes_scanned - context);
                 else
                     hexdump_region(begin, 2 * context, 0);
             }
             else
             {
-                if ( bytes_scanned >= context )
+                if (bytes_scanned >= context)
                     hexdump_region(data - context, size - bytes_scanned + context, bytes_scanned - context);
                 else
                     hexdump_region(begin, size, 0);
