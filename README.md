@@ -5,7 +5,8 @@ Search binary files for a string and see a hexdump of the surrounding
 region. For example, searching for the string 'context' within the
 filescan binary:
 
-```./filescan context filescan
+```
+./filescan context filescan
 ---- Offset: 3931 (0x00000000000f5b) ----
 0000000000000f1b: 000f 1f40 0048 89f2 89fe bf01 0000 00e9   ...@.H..........
 0000000000000f2b: 71f7 ffff 9048 83ec 0848 83c4 08c3 0000   q....H...H......
