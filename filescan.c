@@ -67,53 +67,32 @@ void hexdump_region(const char *data, size_t length, size_t offset)
     char *bufpos = &buffer[0];
     int printed_chars = 0;
 
-    while (data != end)
-    {
-        /* Display offset at the beginning of each line */
-        if (count % 16 == 0)
-            printf("%016zx: ", offset);
+    while (data != end) {
+        printf("%016zx: ", offset);
 
-        /* Print hex value of byte, and store a printable
-         * representation for the end of the line.
-         */
-        printed_chars += printf("%2.2hhx", *data);
-        if (is_printable(*data))
-            *bufpos = *data;
-        else
-            *bufpos = '.';
+        do {
+            if (count % 2 == 0)
+                printed_chars += printf("%2.2hhx", *data);
+            else
+                printed_chars += printf("%2.2hhx ", *data);
+            if (is_printable(*data))
+                *bufpos = *data;
+            else
+                *bufpos = '.';
 
-        ++bufpos;
-        ++data;
-        ++count;
-        ++offset;
+            ++count;
+            ++data;
+            ++offset;
+            ++bufpos;
+        } while (count % 16 != 0 && data != end);
 
-        /* Write a space every two bytes */
-        if (count % 2 == 0)
-            printed_chars += printf(" ");
-
-        /* Write the printable representation
-         * at the end of each line.
-         */
-        if (count % 16 == 0)
-        {
-            *bufpos = '\0';
-            printf("  %s\n", buffer);
-            bufpos = &buffer[0];
-            printed_chars = 0;
-        }
-    }
-
-    if (bufpos != &buffer[0])
-    {
-        /* Output the final line's printable
-         * representation, taking care to align
-         * correctly.
-         */
         *bufpos = '\0';
         while (printed_chars++ != 40)
             printf(" ");
         printf("  %s\n", buffer);
-    }
+        bufpos = buffer;
+        printed_chars = 0;
+    };
 }
 
 int open_file(const char *filename)
