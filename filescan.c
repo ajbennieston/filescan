@@ -13,7 +13,7 @@
 
 int is_printable(char ch);
 void hexdump_region(const char *data, size_t length, size_t offset);
-int open_file(const char * filename);
+int open_file(const char *filename);
 void close_file(int file_descriptor);
 void *mmap_file(int file_descriptor, size_t fsize);
 size_t file_size(int file_descriptor);
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
     }
     search_string = argv[1];
     filename = argv[2];
-    if ( argc == 4 )
+    if (argc == 4)
         context = atoi(argv[3]);
 
     file_descriptor = open_file(filename);
