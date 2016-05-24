@@ -98,7 +98,7 @@ void hexdump_region(const char *data, size_t length, size_t offset)
 int open_file(const char *filename)
 {
     int fd;
-    fd = open(filename, O_RDONLY | O_LARGEFILE);
+    fd = open(filename, O_RDONLY);
     return fd;
 }
 
