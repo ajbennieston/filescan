@@ -71,10 +71,10 @@ void hexdump_region(const char *data, size_t length, size_t offset)
         printf("%016zx: ", offset);
 
         do {
-            if (count % 2 == 0)
-                printed_chars += printf("%2.2hhx", *data);
-            else
-                printed_chars += printf("%2.2hhx ", *data);
+            printed_chars += printf("%2.2hhx", *data);
+            if (count % 2 != 0)
+                printed_chars += printf(" ");
+
             if (is_printable(*data))
                 *bufpos = *data;
             else
