@@ -1,4 +1,3 @@
-CC:=clang
 CFLAGS:=-Wall -Wextra -std=c11 -pedantic
 OBJECTS:=$(patsubst %.c,%.o,$(wildcard *.c))
 
