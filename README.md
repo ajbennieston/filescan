@@ -1,6 +1,8 @@
 filescan
 ========
 
+[![Build Status](https://travis-ci.org/ajbennieston/filescan.svg?branch=master)](https://travis-ci.org/ajbennieston/filescan)
+
 Search binary files for a string and see a hexdump of the surrounding
 region. For example, searching for the string 'context' within the
 filescan binary:
